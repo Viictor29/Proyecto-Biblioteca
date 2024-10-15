@@ -14,6 +14,11 @@ public class Libro {
         this.isbn = isbn;
     }
 
+    public Libro( String titulo, String isbn) {
+        this.titulo = titulo;
+        this.isbn = isbn;
+    }
+
     //Getters y Setters
     public int getId_libro() {
         return id_libro;
