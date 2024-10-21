@@ -6,6 +6,10 @@ public class Usuario {
     public Usuario() {
     }
 
+    public Usuario(String nombre) {
+        this.nombre = nombre;
+    }
+
     public Usuario(int id_usuario, String nombre) {
         this.id_usuario = id_usuario;
         this.nombre = nombre;

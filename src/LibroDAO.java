@@ -6,7 +6,7 @@ import java.util.Scanner;
 
 public class LibroDAO {
 
-    ArrayList<Libro> libros = new ArrayList<>();;
+    ArrayList<Libro> listaLibros = new ArrayList<>();;
     Scanner teclado = new Scanner(System.in);
 
     //Método Insertar
@@ -30,7 +30,7 @@ public class LibroDAO {
     }
     //Método Leer
     public ArrayList<Libro> leerLibros(){
-        libros.clear();
+        listaLibros.clear();
         String SQL = "SELECT * FROM Libro";
         try (PreparedStatement ps = Conexion.crearConexion().prepareStatement(SQL)){
             ResultSet rs = ps.executeQuery();
@@ -39,19 +39,19 @@ public class LibroDAO {
                 String titulo = rs.getString("titulo");
                 String isbn = rs.getString("isbn");
                 Libro libro = new Libro(id, titulo, isbn);
-                libros.add(libro);
+                listaLibros.add(libro);
             }
         }catch (SQLException e){
             e.printStackTrace();
         }
-        return libros;
+        return listaLibros;
     }
     //Método Eliminar
     public void eliminaLibro(){
         System.out.println("Indica el isbn que quiere eliminar: ");
         int isbn = teclado.nextInt();
         teclado.nextLine();
-        for (Libro libro:libros){
+        for (Libro libro:listaLibros){
             if (libro.getIsbn().equals(isbn)){
                 String SQL = "DELETE FROM AUTOR WHERE Isbn = ?";
                 try (PreparedStatement ps = Conexion.crearConexion().prepareStatement(SQL)){
@@ -64,5 +64,26 @@ public class LibroDAO {
                 System.out.println("No hay autor con este isbn");
         }
 
+    }
+
+    //Metodo Actualizar
+    public void actualizarLibro(){
+        System.out.println("Introduce el id del libro que quieres actualizar: ");
+        int id = teclado.nextInt();
+
+        for (Libro libro:listaLibros){
+            String SQL = "UPDATE LIBRO SET TITULO, VALUES = ? WHERE ID = ?";
+            if (id == libro.getId_libro()){
+                try (PreparedStatement ps = Conexion.crearConexion().prepareStatement(SQL)){
+                    System.out.println("Introduce el nuevo titulo");
+                    String titulo = teclado.nextLine();
+                    ps.setString(1, titulo);
+                    ps.setInt(2, id);
+                    ps.executeUpdate();
+                }catch (SQLException e){
+                    e.printStackTrace();
+                }
+            }
+        }
     }
 }
