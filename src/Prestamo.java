@@ -1,6 +1,8 @@
 import java.util.Date;
 
 public class Prestamo {
+    String stringFechaInicio;
+    String stringFechaFin;
     private int id_prestamo;
     private Date fechaFin, fechaInicio;
 
@@ -8,10 +10,20 @@ public class Prestamo {
     public Prestamo() {
     }
 
+    public Prestamo(Date fechaFin, Date fechaInicio) {
+        this.fechaFin = fechaFin;
+        this.fechaInicio = fechaInicio;
+    }
+
     public Prestamo(int id_prestamo, Date fechaFin, Date fechaInicio) {
         this.id_prestamo = id_prestamo;
         this.fechaFin = fechaFin;
         this.fechaInicio = fechaInicio;
+    }
+    public Prestamo(int id_prestamo, String fechaFin, String fechaInicio) {
+        this.id_prestamo = id_prestamo;
+        this.stringFechaInicio = fechaInicio;
+        this.stringFechaFin = fechaFin;
     }
 
     //Getters y Setters
@@ -42,6 +54,6 @@ public class Prestamo {
 
     @Override
     public String toString() {
-        return "Id del prestamo: " + id_prestamo + ", Fecha de inicio: " + fechaInicio + ", Fecha de fin: " + fechaFin;
+        return "Id del prestamo: " + id_prestamo + ", Fecha de inicio: " + stringFechaInicio + ", Fecha de fin: " + stringFechaFin;
     }
 }

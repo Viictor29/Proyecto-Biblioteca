@@ -53,38 +53,46 @@ public class AutorDAO {
         int id = teclado.nextInt();
         teclado.nextLine();
 
-        for (Autor autor:listaAutores){
-            if (id == autor.getId_autor()){
-                String SQL = "DELETE FROM AUTOR WHERE ID = ?";
-                try (PreparedStatement ps = Conexion.crearConexion().prepareStatement(SQL)){
-                    ps.setInt(1, id);
-                    ps.executeUpdate();
-                }catch (SQLException e){
-                    e.printStackTrace();
-                }
-            }else
-                System.out.println("No hay autor con este id");
+        String SQL = "DELETE FROM AUTOR WHERE ID = ?";
+        try (PreparedStatement ps = Conexion.crearConexion().prepareStatement(SQL)){
+            ps.setInt(1, id);
+            ps.executeUpdate();
+        }catch (SQLException e){
+            e.printStackTrace();
         }
-
     }
 
-    public void actualizarAutor(){
+    public Autor actualizarAutor() throws SQLException{
+        Autor autor = new Autor();
         System.out.println("Introduce el id del autor que quieres actualizar: ");
         int id = teclado.nextInt();
+        teclado.nextLine();
 
-        for (Autor autor: listaAutores){
-            if (id == autor.getId_autor()){
-                String SQL = "UPDATE  AUTOR SET NOMBRE, VALUES = ? WHERE ID = ?";
-                try (PreparedStatement ps = Conexion.crearConexion().prepareStatement(SQL)){
-                    System.out.println("Introduce el nuevo nombre: ");
-                    String nombre = teclado.nextLine();
-                    ps.setString(1,nombre);
-                    ps.setInt(2, id);
-                    ps.executeUpdate();
-                }catch (SQLException e){
-                    e.printStackTrace();
-                }
-            }
+
+        String SQL = "SELECT COUNT(*) FROM AUTOR WHERE ID = ?";
+        PreparedStatement ps = Conexion.crearConexion().prepareStatement(SQL);
+        ps.setInt(1, id);
+        ResultSet rs = ps.executeQuery();
+
+        if (rs.next() && rs.getInt(1)==0){
+            System.out.println("El autor " + autor + " no existe en la Base de Datos");
+
+        }else {
+            System.out.println("Introduce el nuevo nombre: ");
+            String nombre = teclado.nextLine();
+
+            String SQLactualizar = "UPDATE AUTOR SET NOMBRE = ? WHERE ID = ? ";
+            PreparedStatement ps1 = Conexion.crearConexion().prepareStatement(SQLactualizar);
+
+            ps1.setString(1, nombre);
+            ps1.setInt(2, id);
+            ps1.executeUpdate();
+
+            autor = new Autor(nombre);
+            listaAutores.add(autor);
         }
+        return autor;
     }
 }
+
+

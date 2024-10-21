@@ -53,42 +53,54 @@ public class LibroDAO {
     }
     //Método Eliminar
     public void eliminaLibro(){
-        System.out.println("Indica el isbn que quiere eliminar: ");
+        System.out.println("Indica el id que quiere eliminar: ");
         int isbn = teclado.nextInt();
         teclado.nextLine();
-        for (Libro libro:listaLibros){
-            if (libro.getIsbn().equals(isbn)){
-                String SQL = "DELETE FROM AUTOR WHERE Isbn = ?";
-                try (PreparedStatement ps = Conexion.crearConexion().prepareStatement(SQL)){
-                    ps.setInt(1, isbn);
-                    ps.executeUpdate();
-                }catch (SQLException e){
-                    e.printStackTrace();
-                }
-            }else
-                System.out.println("No hay autor con este isbn");
-        }
 
+        String SQL = "DELETE FROM LIBRO WHERE ID = ?";
+        try (PreparedStatement ps = Conexion.crearConexion().prepareStatement(SQL)){
+            ps.setInt(1, isbn);
+            ps.executeUpdate();
+        }catch (SQLException e){
+            e.printStackTrace();
+        }
     }
 
+
     //Metodo Actualizar
-    public void actualizarLibro(){
+    public Libro actualizarLibro() throws SQLException{
+        Libro libro = new Libro();
         System.out.println("Introduce el id del libro que quieres actualizar: ");
         int id = teclado.nextInt();
+        teclado.nextLine();
 
-        for (Libro libro:listaLibros){
-            String SQL = "UPDATE LIBRO SET TITULO, VALUES = ? WHERE ID = ?";
-            if (id == libro.getId_libro()){
-                try (PreparedStatement ps = Conexion.crearConexion().prepareStatement(SQL)){
-                    System.out.println("Introduce el nuevo titulo");
-                    String titulo = teclado.nextLine();
-                    ps.setString(1, titulo);
-                    ps.setInt(2, id);
-                    ps.executeUpdate();
-                }catch (SQLException e){
-                    e.printStackTrace();
-                }
-            }
+
+        String SQL = "SELECT COUNT(*) FROM LIBRO WHERE ID = ?";
+        PreparedStatement ps = Conexion.crearConexion().prepareStatement(SQL);
+        ps.setInt(1, id);
+        ResultSet rs = ps.executeQuery();
+
+        if (rs.next() && rs.getInt(1)==0){
+            System.out.println("El libro " + libro + " no existe en la Base de Datos");
+
+        }else {
+            System.out.println("Introduce el nuevo titulo: ");
+            String nombre = teclado.nextLine();
+
+            System.out.println("Introduce el nuevo ISBN: ");
+            String ISBN = teclado.nextLine();
+
+            String SQLactualizar = "UPDATE LIBRO SET TITULO = ?, ISBN = ? WHERE ID = ? ";
+            PreparedStatement ps1 = Conexion.crearConexion().prepareStatement(SQLactualizar);
+
+            ps1.setString(1, nombre);
+            ps1.setString(2,ISBN);
+            ps1.setInt(3, id);
+            ps1.executeUpdate();
+
+            libro = new Libro(nombre, ISBN);
+            listaLibros.add(libro);
         }
+        return libro;
     }
 }

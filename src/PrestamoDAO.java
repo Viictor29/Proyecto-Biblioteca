@@ -16,15 +16,14 @@ public class PrestamoDAO {
     //Los 4 métodos del DAO
     public Prestamo crearPrestamo(){
         Prestamo p = new Prestamo();
-        System.out.println("Introduce el id del Préstamo: ");
-        int idPrestamo = teclado.nextInt();
+
         String SQL = "INSERT INTO Prestamo (fechaInicio, fechaFin) VALUES (?,?)";
         try (PreparedStatement ps = Conexion.crearConexion().prepareStatement(SQL)){
-            ps.setString(1, String.valueOf(idPrestamo));
-            ps.setDate(2, fechaInicio);
-            ps.setDate(3, fechaFin);
+
+            ps.setDate(1, fechaInicio);
+            ps.setDate(2, fechaFin);
             ps.executeUpdate();
-            p = new Prestamo(idPrestamo, fechaInicio, fechaFin);
+            p = new Prestamo(fechaInicio, fechaFin);
         } catch (SQLException e) {
             e.printStackTrace();
         }
@@ -33,13 +32,13 @@ public class PrestamoDAO {
 
     public ArrayList<Prestamo> leerPrestamo(){
         listaPrestamos.clear();
-        String SQL = "SELECT * FROM AUTOR";
+        String SQL = "SELECT * FROM PRESTAMO";
         try (PreparedStatement ps = Conexion.crearConexion().prepareStatement(SQL)){
             ResultSet rs = ps.executeQuery();
             while (rs.next()){
                 int id = rs.getInt("id");
-                Date fechaI = rs.getDate("fechaInicio");
-                Date fechaF = rs.getDate("fechaFin");
+                String fechaI = rs.getString("fechaInicio");
+                String fechaF = rs.getString("fechaFin");
                 Prestamo p = new Prestamo(id, fechaI, fechaF);
                 listaPrestamos.add(p);
             }
@@ -53,37 +52,48 @@ public class PrestamoDAO {
         System.out.println("Indica el id que quiere eliminar: ");
         int id = teclado.nextInt();
         teclado.nextLine();
-        for (Prestamo p : listaPrestamos){
-            if (id == p.getId_prestamo()){
-                String SQL = "DELETE FROM PRESTAMO WHERE ID = ?";
-                try (PreparedStatement ps = Conexion.crearConexion().prepareStatement(SQL)){
-                    ps.setInt(1, id);
-                    ps.executeUpdate();
-                }catch (SQLException e){
-                    e.printStackTrace();
-                }
-            }else
-                System.out.println("No hay Prestamo con este id");
+        String SQL = "DELETE FROM PRESTAMO WHERE ID = ?";
+        try (PreparedStatement ps = Conexion.crearConexion().prepareStatement(SQL)){
+            ps.setInt(1, id);
+            ps.executeUpdate();
+        }catch (SQLException e){
+            e.printStackTrace();
         }
     }
 
-    public void actualizarPrestamo(){
-        System.out.println("Introduce el id del Prestamo que quieres actualizar: ");
+    public Prestamo actualizarPrestamo() throws SQLException{
+        Prestamo prestamo = new Prestamo();
+        System.out.println("Introduce el id del prestamo que quieres actualizar: ");
         int id = teclado.nextInt();
-        for (Prestamo p : listaPrestamos){
-            if (id == p.getId_prestamo()){
-                String SQL = "UPDATE AUTOR SET fechaInicio, fechaFin VALUES = ? , ? WHERE ID = ?";
-                try (PreparedStatement ps = Conexion.crearConexion().prepareStatement(SQL)){
-                    Date fechaInicio = Date.valueOf(LocalDate.now());
-                    Date fechaFin = Date.valueOf(LocalDate.now().plusMonths(1));
-                    ps.setDate(1,fechaInicio);
-                    ps.setDate(2, fechaFin);
-                    ps.setInt(3, id);
-                    ps.executeUpdate();
-                }catch (SQLException e){
-                    e.printStackTrace();
-                }
-            }
+        teclado.nextLine();
+
+
+        String SQL = "SELECT COUNT(*) FROM PRESTAMO WHERE ID = ?";
+        PreparedStatement ps = Conexion.crearConexion().prepareStatement(SQL);
+        ps.setInt(1, id);
+        ResultSet rs = ps.executeQuery();
+
+        if (rs.next() && rs.getInt(1)==0){
+            System.out.println("El prestamo " + prestamo + " no existe en la Base de Datos");
+
+        }else {
+            System.out.println("Introduce la nueva fecha de inicio: ");
+            String fechaInicio = teclado.nextLine();
+
+            System.out.println("Introduce la nueva fecha de fin: ");
+            String fechaFin = teclado.nextLine();
+
+            String SQLactualizar = "UPDATE PRESTAMO SET fechaInicio = ?, fechaFin = ? WHERE ID = ? ";
+            PreparedStatement ps1 = Conexion.crearConexion().prepareStatement(SQLactualizar);
+
+            ps1.setString(1, fechaInicio);
+            ps1.setString(2,fechaFin);
+            ps1.setInt(3, id);
+            ps1.executeUpdate();
+
+//            prestamo = new Prestamo(fechaInicio, fechaFin);
+            listaPrestamos.add(prestamo);
         }
+        return prestamo;
     }
 }

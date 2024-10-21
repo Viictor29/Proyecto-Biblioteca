@@ -55,39 +55,47 @@ public class UsuarioDAO {
         int id = teclado.nextInt();
         teclado.nextLine();
 
-        for (Usuario usuario:listaUsuarios){
-            if(id == usuario.getId_usuario()){
-                String SQL = "DELETE FROM USUARIO WHERE ID = ?";
-                try (PreparedStatement ps = Conexion.crearConexion().prepareStatement(SQL)){
-                    ps.setInt(1, id);
-                    ps.executeUpdate();
-                }catch (SQLException e){
-                    e.printStackTrace();
-                }
-            }else
-                System.out.println("No hay usuario con este id");
+        String SQL = "DELETE FROM USUARIO WHERE ID = ?";
+        try (PreparedStatement ps = Conexion.crearConexion().prepareStatement(SQL)){
+            ps.setInt(1, id);
+            ps.executeUpdate();
+        }catch (SQLException e){
+            e.printStackTrace();
         }
+
     }
 
     //Metodo actualizar usuario
-    public void actualizarUsuario(){
+    public Usuario actualizarUsuario() throws SQLException{
+        Usuario usuario = new Usuario();
         System.out.println("Introduce el id del usuario que quieres actualizar: ");
         int id = teclado.nextInt();
+        teclado.nextLine();
 
-        for (Usuario usuario : listaUsuarios){
-            if (id == usuario.getId_usuario()){
-                String SQL = "UPDATE USUARIO SET NOMBRE, VALUES = ? WHERE ID = ?";
-                try (PreparedStatement ps = Conexion.crearConexion().prepareStatement(SQL)){
-                    System.out.println("Introduce el nuevo nombre de usuario: ");
 
-                    String nombre = teclado.nextLine();
-                    ps.setString(1, nombre);
-                    ps.setInt(2, id);
-                    ps.executeUpdate();
-                }catch (SQLException e){
-                    e.printStackTrace();
-                }
-            }
+        String SQL = "SELECT COUNT(*) FROM USUARIO WHERE ID = ?";
+        PreparedStatement ps = Conexion.crearConexion().prepareStatement(SQL);
+        ps.setInt(1, id);
+        ResultSet rs = ps.executeQuery();
+
+        if (rs.next() && rs.getInt(1)==0){
+            System.out.println("El usuario " + usuario + " no existe en la Base de Datos");
+
+        }else {
+            System.out.println("Introduce el nuevo nombre: ");
+            String nombre = teclado.nextLine();
+
+
+            String SQLactualizar = "UPDATE USUARIO SET NOMBRE = ? WHERE ID = ? ";
+            PreparedStatement ps1 = Conexion.crearConexion().prepareStatement(SQLactualizar);
+
+            ps1.setString(1, nombre);
+            ps1.setInt(2, id);
+            ps1.executeUpdate();
+
+            usuario = new Usuario();
+            listaUsuarios.add(usuario);
         }
+        return usuario;
     }
 }
