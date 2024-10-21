@@ -1,3 +1,4 @@
+import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
@@ -8,6 +9,11 @@ import java.util.Scanner;
 public class AutorDAO {
     ArrayList<Autor> listaAutores = new ArrayList<>();
     Scanner teclado = new Scanner(System.in);
+    private Connection conexion;
+    public AutorDAO(Connection conexion){
+        this.conexion = conexion;
+    }
+
     public Autor crearAutor(){
         Autor autor = new Autor();
         System.out.println("Introduce el nombre del autor: ");

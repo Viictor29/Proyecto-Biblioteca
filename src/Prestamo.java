@@ -1,4 +1,4 @@
-import java.sql.Date;
+import java.util.Date;
 
 public class Prestamo {
     private int id_prestamo;
@@ -15,6 +15,7 @@ public class Prestamo {
     }
 
     //Getters y Setters
+
     public int getId_prestamo() {
         return id_prestamo;
     }
@@ -39,7 +40,6 @@ public class Prestamo {
         this.fechaInicio = fechaInicio;
     }
 
-    //toString
     @Override
     public String toString() {
         return "Id del prestamo: " + id_prestamo + ", Fecha de inicio: " + fechaInicio + ", Fecha de fin: " + fechaFin;

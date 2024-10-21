@@ -1,7 +1,4 @@
-import java.sql.PreparedStatement;
-import java.sql.ResultSet;
-import java.sql.SQLException;
-import java.sql.Date;
+import java.sql.*;
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.Scanner;
@@ -12,6 +9,10 @@ public class PrestamoDAO {
     Scanner teclado = new Scanner(System.in);
     Date fechaInicio = Date.valueOf(LocalDate.now());
     Date fechaFin = Date.valueOf(LocalDate.now().plusMonths(1));
+    private Connection conexion;
+    public PrestamoDAO(Connection conexion){
+        this.conexion = conexion;
+    }
     //Los 4 métodos del DAO
     public Prestamo crearPrestamo(){
         Prestamo p = new Prestamo();

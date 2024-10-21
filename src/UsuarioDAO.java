@@ -1,3 +1,4 @@
+import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
@@ -7,6 +8,10 @@ import java.util.Scanner;
 public class UsuarioDAO {
     ArrayList<Usuario> listaUsuarios = new ArrayList<>();
     Scanner teclado = new Scanner(System.in);
+    private Connection conexion;
+    public UsuarioDAO(Connection conexion){
+        this.conexion = conexion;
+    }
 
     //Metodo crear Usuario
     public Usuario crearUsuario(){

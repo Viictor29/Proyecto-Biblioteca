@@ -9,6 +9,11 @@ public class Libro_AutorDAO {
     Scanner teclado = new Scanner(System.in);
     Libro_Autor Libro_Autor;
 
+    private Connection conexion;
+    public Libro_AutorDAO(Connection conexion){
+        this.conexion = conexion;
+    }
+
     public Libro_Autor crearLibro_Autor() throws SQLException{
         System.out.println("Introduce id Libro: ");
         int idLibro = teclado.nextInt();
@@ -107,7 +112,5 @@ public class Libro_AutorDAO {
             ps2.setInt(2, idLibro);
             ps2.executeUpdate();
         }
-
-
     }
 }

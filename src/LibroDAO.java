@@ -1,3 +1,4 @@
+import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
@@ -8,6 +9,10 @@ public class LibroDAO {
 
     ArrayList<Libro> listaLibros = new ArrayList<>();;
     Scanner teclado = new Scanner(System.in);
+    private Connection conexion;
+    public LibroDAO(Connection conexion){
+        this.conexion = conexion;
+    }
 
     //Método Insertar
     public Libro crearLibro(){
