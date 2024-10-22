@@ -45,10 +45,10 @@ public class Sincronizacion {
     }
 
     public void sincronizarPrestamos(){
-        ArrayList<Prestamo> prestamos = this.prestamoDAO.listaPrestamos;
+        ArrayList<Prestamo> prestamos = this.prestamoDAO.leerPrestamo();
         System.out.println("El listado de prestamos es: ");
-        for (Prestamo prestamo:prestamos){
-            System.out.println(prestamo);
+        for (int i = 0; i < prestamos.size(); i++) {
+            System.out.println(prestamos.get(i));
         }
     }
 
