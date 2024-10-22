@@ -16,11 +16,11 @@ public class Prestamo {
         this.fechaInicio = fechaInicio;
     }
 
-    /*public Prestamo(int id_prestamo, Date fechaFin, Date fechaInicio) {
+    public Prestamo(int id_prestamo, Date fechaFin, Date fechaInicio) {
         this.id_prestamo = id_prestamo;
         this.fechaFin = fechaFin;
         this.fechaInicio = fechaInicio;
-    }*/
+    }
     public Prestamo(int id_prestamo, String fechaFin, String fechaInicio, int idUsuario, int idLibro) {
         this.id_prestamo = id_prestamo;
         this.stringFechaInicio = fechaInicio;

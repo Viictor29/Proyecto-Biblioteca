@@ -103,7 +103,11 @@ public class Main {
                     sincronizacion.sincronizarUsuarios();
                 }
                 case 17 -> {
-                    libro_autorDAO.eliminarLibro_Autor();
+                    libro_autorDAO.ActualizarLibro_Autor();
+                    sincronizacion.sincronizarLibroAutor();
+                }
+                case 18 -> {
+                    libro_autorDAO.crearLibro_Autor();
                     sincronizacion.sincronizarLibroAutor();
                 }
                 case 0 -> {

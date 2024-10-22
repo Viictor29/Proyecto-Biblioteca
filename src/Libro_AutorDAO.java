@@ -76,44 +76,25 @@ public class Libro_AutorDAO {
         ps.executeUpdate();
     }
 
-    public void ActualizarLibro_Autor() throws SQLException{
-        System.out.println("¿Qué quieres cambiar? 1- IdLibro 2-IdAutor");
-        int opcion = teclado.nextInt();
-        if (opcion == 1) {
-            System.out.println("Dime el id del Libro a actualizar: "); //Para saber el IdAutor de lo que vamos a actualizar.
-            int idLibro = teclado.nextInt();
-            String SQL = "SELECT idAutor from Libro_Autor WHERE idLibro = ?";
-            PreparedStatement ps = Conexion.crearConexion().prepareStatement(SQL);
-            ps.setInt(1, idLibro);
-            ResultSet rs = ps.executeQuery();
-            if (rs.next()) {
-                int idAutor = rs.getInt("idAutor"); // Solo accedemos si hay una fila
-                System.out.println("Dime el nuevo id: ");
-                int idLibroNuevo = teclado.nextInt();
-            String SQL1 = "UPDATE Libro_Autor SET idLibro, idAutor VALUES (?, ?)"; //Actualizamos el campo donde esté es idLibro.
+    public void ActualizarLibro_Autor() throws SQLException {
+        System.out.println("Dime el id del Autor a actualizar: "); //Para saber el IdAutor de lo que vamos a actualizar.
+        int idLibro = teclado.nextInt();
+        String SQL = "SELECT idLibro from Libro_Autor WHERE idAutor = ?";
+        PreparedStatement ps = Conexion.crearConexion().prepareStatement(SQL);
+        ps.setInt(1, idLibro);
+        ResultSet rs = ps.executeQuery();
+        if (rs.next()) {
+            int idAutor = rs.getInt("idLibro");
+            System.out.println("Dime el nuevo id: ");
+            int idLibroNuevo = teclado.nextInt();
+            String SQL1 = "UPDATE Libro_Autor SET idAutor = ? WHERE idLibro = ?"; //Actualizamos el campo donde esté es idLibro.
             PreparedStatement ps2 = Conexion.crearConexion().prepareStatement(SQL1);
             ps2.setInt(1, idLibroNuevo);
             ps2.setInt(2, idAutor);
             ps2.executeUpdate();
-            } else {
-                System.out.println("No se encontró el libro con el id especificado.");
-            }
-        } else if (opcion == 2){
-            System.out.println("Dime el id del Autor a actualizar: "); //Para saber el IdLibro de lo que vamos a actualizar.
-            int idAutor = teclado.nextInt();
-            String SQL = "SELECT idLibro from Libro_Autor WHERE idAutor = ?";
-            PreparedStatement ps = Conexion.crearConexion().prepareStatement(SQL);
-            ps.setInt(1, idAutor);
-            ResultSet rs = ps.executeQuery();
-            int idLibro = rs.getInt("idLibro"); //Lo guardamos
-            //SEGUNDA PARTE
-            System.out.println("Dime el nuevo id: ");
-            int idAutorNuevo = teclado.nextInt();
-            String SQL1 = "UPDATE Libro_Autor SET idAutor, idLibro VALUES ?, ?"; //Actualizamos el campo donde esté es idLibro.
-            PreparedStatement ps2 = Conexion.crearConexion().prepareStatement(SQL1);
-            ps2.setInt(1, idAutorNuevo);
-            ps2.setInt(2, idLibro);
-            ps2.executeUpdate();
+        } else {
+            System.out.println("No se encontró el autor con el id especificado.");
         }
     }
 }
+
