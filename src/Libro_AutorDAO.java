@@ -77,25 +77,42 @@ public class Libro_AutorDAO {
     }
 
     public void ActualizarLibro_Autor() throws SQLException {
-        System.out.println("Dime el id del Autor a actualizar: "); //Para saber el IdAutor de lo que vamos a actualizar.
+        ArrayList<Integer> posiblesLibros = new ArrayList<>();
+        System.out.println("Dime el id del Autor a actualizar: "); // Para saber el IdAutor de lo que vamos a actualizar.
         int idLibro = teclado.nextInt();
         String SQL = "SELECT idLibro from Libro_Autor WHERE idAutor = ?";
         PreparedStatement ps = Conexion.crearConexion().prepareStatement(SQL);
         ps.setInt(1, idLibro);
         ResultSet rs = ps.executeQuery();
-        if (rs.next()) {
-            int idAutor = rs.getInt("idLibro");
-            System.out.println("Dime el nuevo id: ");
+        while (rs.next()) {
+            int id = rs.getInt(1);
+            posiblesLibros.add(id);
+        }
+        if (posiblesLibros.size() > 1) {
+            System.out.println("Hay varios libros de este autor, cuál quieres actualizar: " + posiblesLibros.toString());
+            int idAutor = teclado.nextInt();
+            System.out.println("Dime el nuevo Autor: ");
             int idLibroNuevo = teclado.nextInt();
-            String SQL1 = "UPDATE Libro_Autor SET idAutor = ? WHERE idLibro = ? AND idAutor = ?"; //Actualizamos el campo donde esté es idLibro.
+            String SQL1 = "UPDATE Libro_Autor SET idAutor = ? WHERE idLibro = ? AND idAutor = ?";
             PreparedStatement ps2 = Conexion.crearConexion().prepareStatement(SQL1);
             ps2.setInt(1, idLibroNuevo);
             ps2.setInt(2, idAutor);
             ps2.setInt(3, idLibro);
             ps2.executeUpdate();
+        } else if (posiblesLibros.size() == 1) {
+            System.out.println("Dime el nuevo Autor: ");
+            int idLibroNuevo = teclado.nextInt();
+            String SQL1 = "UPDATE Libro_Autor SET idAutor = ? WHERE idLibro = ? AND idAutor = ?";
+            PreparedStatement ps2 = Conexion.crearConexion().prepareStatement(SQL1);
+            ps2.setInt(1, idLibroNuevo);
+            ps2.setInt(2, posiblesLibros.get(0));  // Usamos el único idLibro encontrado
+            ps2.setInt(3, idLibro); // El id del autor original
+            ps2.executeUpdate();
+            System.out.println("Actualización realizada con éxito.");
         } else {
-            System.out.println("No se encontró el autor con el id especificado.");
+            System.out.println("No se encontraron libros asociados a este autor.");
         }
+
     }
 }
 

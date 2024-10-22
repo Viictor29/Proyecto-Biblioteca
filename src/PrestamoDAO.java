@@ -37,11 +37,9 @@ public class PrestamoDAO {
             ResultSet rs = ps.executeQuery();
             while (rs.next()){
                 int id = rs.getInt("id");
-                String fechaI = rs.getDate("fechaInicio").toString();
-                String fechaF = rs.getDate("fechaFin").toString();
-                int idUsuario = rs.getInt("usuarioId");
-                int idLibro = rs.getInt("libroId");
-                Prestamo p = new Prestamo(id, fechaI, fechaF, idUsuario, idLibro);
+                String fechaI = rs.getString("fechaInicio");
+                String fechaF = rs.getString("fechaFin");
+                Prestamo p = new Prestamo(id, fechaI, fechaF);
                 listaPrestamos.add(p);
             }
         }catch (SQLException e){

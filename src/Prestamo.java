@@ -5,7 +5,6 @@ public class Prestamo {
     String stringFechaFin;
     private int id_prestamo;
     private Date fechaFin, fechaInicio;
-    private int idUsuario, idLibro;
 
     //Constructor vacio y general
     public Prestamo() {
@@ -21,12 +20,10 @@ public class Prestamo {
         this.fechaFin = fechaFin;
         this.fechaInicio = fechaInicio;
     }
-    public Prestamo(int id_prestamo, String fechaFin, String fechaInicio, int idUsuario, int idLibro) {
+    public Prestamo(int id_prestamo, String fechaFin, String fechaInicio) {
         this.id_prestamo = id_prestamo;
         this.stringFechaInicio = fechaInicio;
         this.stringFechaFin = fechaFin;
-        this.idUsuario = idUsuario;
-        this.idLibro = idLibro;
     }
 
     //Getters y Setters
@@ -57,6 +54,6 @@ public class Prestamo {
 
     @Override
     public String toString() {
-        return "Id del prestamo: " + id_prestamo + ", Fecha de inicio: " + stringFechaInicio + ", Fecha de fin: " + stringFechaFin + ", idUsuario: " + idUsuario + ", idLibro: " + idLibro;
+        return "Id del prestamo: " + id_prestamo + ", Fecha de inicio: " + stringFechaInicio + ", Fecha de fin: " + stringFechaFin;
     }
 }
