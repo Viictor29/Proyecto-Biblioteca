@@ -68,12 +68,12 @@ public class Libro_AutorDAO {
         int idLibro = teclado.nextInt();
         System.out.println("Dime el id del Autor: ");
         int idAutor = teclado.nextInt();
+        teclado.nextLine();
         String SQL = "DELETE FROM Libro_Autor WHERE idLibro = ? AND idAutor = ?";
         PreparedStatement ps = Conexion.crearConexion().prepareStatement(SQL);
         ps.setInt(1, idLibro);
         ps.setInt(2, idAutor);
         ps.executeUpdate();
-        JOptionPane.showMessageDialog(null, "Libro eliminado");
     }
 
     public void ActualizarLibro_Autor() throws SQLException{
@@ -86,15 +86,18 @@ public class Libro_AutorDAO {
             PreparedStatement ps = Conexion.crearConexion().prepareStatement(SQL);
             ps.setInt(1, idLibro);
             ResultSet rs = ps.executeQuery();
-            int idAutor = rs.getInt("idAutor"); //Lo guardamos
-            //SEGUNDA PARTE
-            System.out.println("Dime el nuevo id: ");
-            int idLibroNuevo = teclado.nextInt();
-            String SQL1 = "UPDATE Libro_Autor SET idLibro, idAutor VALUES ?, ?"; //Actualizamos el campo donde esté es idLibro.
+            if (rs.next()) {
+                int idAutor = rs.getInt("idAutor"); // Solo accedemos si hay una fila
+                System.out.println("Dime el nuevo id: ");
+                int idLibroNuevo = teclado.nextInt();
+            String SQL1 = "UPDATE Libro_Autor SET idLibro, idAutor VALUES (?, ?)"; //Actualizamos el campo donde esté es idLibro.
             PreparedStatement ps2 = Conexion.crearConexion().prepareStatement(SQL1);
             ps2.setInt(1, idLibroNuevo);
             ps2.setInt(2, idAutor);
             ps2.executeUpdate();
+            } else {
+                System.out.println("No se encontró el libro con el id especificado.");
+            }
         } else if (opcion == 2){
             System.out.println("Dime el id del Autor a actualizar: "); //Para saber el IdLibro de lo que vamos a actualizar.
             int idAutor = teclado.nextInt();

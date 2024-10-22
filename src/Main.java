@@ -102,6 +102,10 @@ public class Main {
                     usuarioDAO.actualizarUsuario();
                     sincronizacion.sincronizarUsuarios();
                 }
+                case 17 -> {
+                    libro_autorDAO.eliminarLibro_Autor();
+                    sincronizacion.sincronizarLibroAutor();
+                }
                 case 0 -> {
                     System.out.println("Saliendo...");
                 }

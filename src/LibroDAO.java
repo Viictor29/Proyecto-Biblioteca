@@ -17,7 +17,7 @@ public class LibroDAO {
     //Método Insertar
     public Libro crearLibro(){
         Libro Libro = new Libro();
-        System.out.println("Introduce el nombre del autor: ");
+        System.out.println("Introduce el nombre del Libro: ");
         String titulo = teclado.nextLine();
         System.out.println("Introduce el ISBN del libro: ");
         String isbn = teclado.nextLine();
