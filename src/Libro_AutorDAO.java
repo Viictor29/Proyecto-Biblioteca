@@ -87,10 +87,11 @@ public class Libro_AutorDAO {
             int idAutor = rs.getInt("idLibro");
             System.out.println("Dime el nuevo id: ");
             int idLibroNuevo = teclado.nextInt();
-            String SQL1 = "UPDATE Libro_Autor SET idAutor = ? WHERE idLibro = ?"; //Actualizamos el campo donde esté es idLibro.
+            String SQL1 = "UPDATE Libro_Autor SET idAutor = ? WHERE idLibro = ? AND idAutor = ?"; //Actualizamos el campo donde esté es idLibro.
             PreparedStatement ps2 = Conexion.crearConexion().prepareStatement(SQL1);
             ps2.setInt(1, idLibroNuevo);
             ps2.setInt(2, idAutor);
+            ps2.setInt(3, idLibro);
             ps2.executeUpdate();
         } else {
             System.out.println("No se encontró el autor con el id especificado.");
