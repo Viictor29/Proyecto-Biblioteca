@@ -7,100 +7,108 @@ import java.util.Scanner;
 
 public class LibroDAO {
 
-    ArrayList<Libro> listaLibros = new ArrayList<>();;
+    // Lista para almacenar los libros
+    ArrayList<Libro> listaLibros = new ArrayList<>();
     Scanner teclado = new Scanner(System.in);
     private Connection conexion;
+
+    // Constructor que recibe una conexión a la base de datos
     public LibroDAO(Connection conexion){
         this.conexion = conexion;
     }
 
-    //Método Insertar
+    // Método para crear un nuevo libro en la base de datos
     public Libro crearLibro(){
-        Libro Libro = new Libro();
+        Libro libro = new Libro();
         System.out.println("Introduce el nombre del Libro: ");
-        String titulo = teclado.nextLine();
+        String titulo = teclado.nextLine();  // Captura el título del libro
         System.out.println("Introduce el ISBN del libro: ");
-        String isbn = teclado.nextLine();
+        String isbn = teclado.nextLine();  // Captura el ISBN del libro
 
-        String SQL = "INSERT INTO Libro (titulo , isbn) VALUES (? , ?)";
+        // Consulta SQL para insertar un libro
+        String SQL = "INSERT INTO Libro (titulo, isbn) VALUES (?, ?)";
         try (PreparedStatement ps = Conexion.crearConexion().prepareStatement(SQL)){
-            ps.setString(1, titulo);
-            ps.setString(2, isbn);
-            ps.executeUpdate();
-            Libro = new Libro(titulo, isbn);
+            ps.setString(1, titulo);  // Asigna el título al query
+            ps.setString(2, isbn);    // Asigna el ISBN al query
+            ps.executeUpdate();       // Ejecuta la inserción
+            libro = new Libro(titulo, isbn);  // Crea un nuevo objeto Libro
         } catch (SQLException e) {
-            e.printStackTrace();
+            e.printStackTrace();  // Manejo de excepciones en caso de error
         }
-        return Libro;
+        return libro;  // Retorna el objeto libro creado
     }
-    //Método Leer
+
+    // Método para leer todos los libros de la base de datos
     public ArrayList<Libro> leerLibros(){
-        listaLibros.clear();
+        listaLibros.clear();  // Limpiar la lista antes de llenarla nuevamente
         String SQL = "SELECT * FROM Libro";
         try (PreparedStatement ps = Conexion.crearConexion().prepareStatement(SQL)){
-            ResultSet rs = ps.executeQuery();
+            ResultSet rs = ps.executeQuery();  // Ejecuta la consulta
+            // Itera sobre el ResultSet y crea objetos Libro con los datos obtenidos
             while (rs.next()){
                 int id = rs.getInt("id");
                 String titulo = rs.getString("titulo");
                 String isbn = rs.getString("isbn");
                 Libro libro = new Libro(id, titulo, isbn);
-                listaLibros.add(libro);
+                listaLibros.add(libro);  // Añade cada libro a la lista
             }
-        }catch (SQLException e){
+        } catch (SQLException e) {
             e.printStackTrace();
         }
-        return listaLibros;
+        return listaLibros;  // Retorna la lista de libros
     }
-    //Método Eliminar
+
+    // Método para eliminar un libro por su ID
     public void eliminaLibro(){
         System.out.println("Indica el id que quiere eliminar: ");
-        int isbn = teclado.nextInt();
-        teclado.nextLine();
+        int id = teclado.nextInt();  // Captura el ID del libro a eliminar
+        teclado.nextLine();  // Consumir el salto de línea
 
+        // Consulta SQL para eliminar el libro por su ID
         String SQL = "DELETE FROM LIBRO WHERE ID = ?";
         try (PreparedStatement ps = Conexion.crearConexion().prepareStatement(SQL)){
-            ps.setInt(1, isbn);
-            ps.executeUpdate();
-        }catch (SQLException e){
+            ps.setInt(1, id);  // Asigna el ID al query
+            ps.executeUpdate();  // Ejecuta la eliminación
+        } catch (SQLException e){
             e.printStackTrace();
         }
     }
 
-
-    //Metodo Actualizar
+    // Método para actualizar la información de un libro
     public Libro actualizarLibro() throws SQLException{
         Libro libro = new Libro();
         System.out.println("Introduce el id del libro que quieres actualizar: ");
-        int id = teclado.nextInt();
-        teclado.nextLine();
+        int id = teclado.nextInt();  // Captura el ID del libro a actualizar
+        teclado.nextLine();  // Consumir el salto de línea
 
-
+        // Verifica si el libro existe en la base de datos
         String SQL = "SELECT COUNT(*) FROM LIBRO WHERE ID = ?";
         PreparedStatement ps = Conexion.crearConexion().prepareStatement(SQL);
-        ps.setInt(1, id);
+        ps.setInt(1, id);  // Asigna el ID al query
         ResultSet rs = ps.executeQuery();
 
-        if (rs.next() && rs.getInt(1)==0){
-            System.out.println("El libro " + libro + " no existe en la Base de Datos");
-
-        }else {
+        // Si el libro no existe, muestra un mensaje
+        if (rs.next() && rs.getInt(1) == 0){
+            System.out.println("El libro con ID " + id + " no existe en la Base de Datos");
+        } else {
+            // Captura los nuevos datos del libro
             System.out.println("Introduce el nuevo titulo: ");
-            String nombre = teclado.nextLine();
-
+            String nombre = teclado.nextLine();  // Nuevo título
             System.out.println("Introduce el nuevo ISBN: ");
-            String ISBN = teclado.nextLine();
+            String isbn = teclado.nextLine();  // Nuevo ISBN
 
-            String SQLactualizar = "UPDATE LIBRO SET TITULO = ?, ISBN = ? WHERE ID = ? ";
+            // Consulta SQL para actualizar el libro
+            String SQLactualizar = "UPDATE LIBRO SET TITULO = ?, ISBN = ? WHERE ID = ?";
             PreparedStatement ps1 = Conexion.crearConexion().prepareStatement(SQLactualizar);
+            ps1.setString(1, nombre);  // Asigna el nuevo título
+            ps1.setString(2, isbn);    // Asigna el nuevo ISBN
+            ps1.setInt(3, id);         // Asigna el ID del libro a actualizar
+            ps1.executeUpdate();       // Ejecuta la actualización
 
-            ps1.setString(1, nombre);
-            ps1.setString(2,ISBN);
-            ps1.setInt(3, id);
-            ps1.executeUpdate();
-
-            libro = new Libro(nombre, ISBN);
-            listaLibros.add(libro);
+            libro = new Libro(nombre, isbn);  // Actualiza el objeto libro
+            listaLibros.add(libro);  // Añade el libro actualizado a la lista
         }
-        return libro;
+        return libro;  // Retorna el libro actualizado
     }
 }
+
